@@ -52,10 +52,10 @@ class BackendAction
 	 * @param	string $action		The action to load.
 	 * @param	string $module		The module to load.
 	 */
-	public function __construct($action, $module)
+	public function __construct($action, $module, BackendTemplate $tpl)
 	{
-		// grab stuff from the reference and store them in this object (for later/easy use)
-		$this->tpl = Spoon::get('template');
+		// set template
+		$this->tpl = $tpl;
 
 		// set properties
 		$this->setModule($module);
@@ -64,8 +64,14 @@ class BackendAction
 		// load the configfile for the required module
 		$this->loadConfig();
 
-		// is the requested action possible? If not we throw an exception. We don't redirect because that could trigger a redirect loop
-		if(!in_array($this->getAction(), $this->config->getPossibleActions())) throw new BackendException('This is an invalid action (' . $this->getAction() . ').');
+		/*
+		 * Is the requested action possible? If not we throw an exception. We don't redirect because
+		 * that could trigger a redirect loop
+		 */
+		if(!in_array($this->getAction(), $this->config->getPossibleActions()))
+		{
+			throw new BackendException('This is an invalid action (' . $this->getAction() . ').');
+		}
 	}
 
 
@@ -80,7 +86,7 @@ class BackendAction
 		// build action-class-name
 		$actionClassName = SpoonFilter::toCamelCase('backend_' . $this->getModule() . '_' . $this->getAction());
 
-		// require the config file, we know it is there because we validated it before (possible actions are defined by existance off the file).
+		// require the config file, we know it is there because we validated it before (possible actions are defined by existence of this file).
 		require_once BACKEND_MODULE_PATH . '/actions/' . $this->getAction() . '.php';
 
 		// validate if class exists (aka has correct name)
@@ -97,7 +103,7 @@ class BackendAction
 		$this->tpl->assign('workingLanguages', $workingLanguages);
 
 		// create action-object
-		$object = new $actionClassName();
+		$object = new $actionClassName(Spoon::get('template'), Spoon::get('url'), Spoon::get('header'));
 
 		// call the execute method of the real action (defined in the module)
 		$object->execute();

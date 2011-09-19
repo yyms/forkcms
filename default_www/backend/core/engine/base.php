@@ -65,12 +65,12 @@ class BackendBaseAction
 	 *
 	 * @return	void
 	 */
-	public function __construct()
+	public function __construct(BackendTemplate $tpl, BackendURL $url, BackendHeader $header)
 	{
 		// get objects from the reference so they are accessable from the action-object
-		$this->tpl = Spoon::get('template');
-		$this->URL = Spoon::get('url');
-		$this->header = Spoon::get('header');
+		$this->tpl = $tpl;
+		$this->URL = $url;
+		$this->header = $header;
 
 		// store the current module and action (we grab them from the URL)
 		$this->setModule($this->URL->getModule());
