@@ -7,10 +7,8 @@
     @package      backend
     @subpackage   core
 
-    @author       Johan Ronsse <johan@netlash.com>
-                  Thomas Deceuninck <thomasdeceuninck@netlash.com>
-                  Matthias Mullie <matthias@mullie.eu>
-    @since        2.0
+    @author       Thomas Deceuninck <thomasdeceuninck@netlash.com>
+    @since        3.0
 
 */
 
@@ -302,6 +300,19 @@
 		#templateVisualFallback .linkedBlocks:empty {
 			padding-top: 12px;
 			margin: 0 12px;
+			border-top: 0;
+		}
+
+		/*
+			Pages add/edit
+			:empty is too hard for IE7 to handle, though the padding placed inside this
+			empty element is neccessary for the sortable to work.
+		 */
+		.ie7 #templateVisualLarge .linkedBlocks,
+		.ie7 #templateVisualFallback .linkedBlocks,
+		.ie8 #templateVisualLarge .linkedBlocks,
+		.ie8 #templateVisualFallback .linkedBlocks {
+			padding-top: 12px;
 			border-top: 0;
 		}
 
