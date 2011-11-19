@@ -7,8 +7,8 @@
     @package      backend
     @subpackage   core
 
-    @author       Johan Ronsse <johan@netlash.com>
-    @since        2.0
+    @author       Thomas Deceuninck <thomasdeceuninck@netlash.com>
+    @since        3.0
 
 */
 
@@ -18,4 +18,11 @@
 	height: 0;
 	clear: both;
 	visibility: hidden;
+	font-size: 0;
+	line-height: 0;;
+}
+
+.ie6 .clearfix,
+.ie7 .clearfix {
+	zoom: 1;
 }
