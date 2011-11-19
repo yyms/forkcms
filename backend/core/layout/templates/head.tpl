@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="{$LANGUAGE}">
+<!--[if lt IE 7 ]> <html lang="{$LANGUAGE}" class="ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="{$LANGUAGE}" class="ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="{$LANGUAGE}" class="ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="{$LANGUAGE}" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{$LANGUAGE}"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
@@ -10,6 +14,4 @@
 	<link rel="shortcut icon" href="/backend/favicon.ico" />
 
 	{iteration:cssFiles}<link rel="stylesheet" href="{$cssFiles.path}" />{$CRLF}{$TAB}{/iteration:cssFiles}
-	<!--[if IE 7]><link rel="stylesheet" href="/backend/core/layout/css/conditionals/ie7.css" /><![endif]-->
-	<!--[if IE 8]><link rel="stylesheet" href="/backend/core/layout/css/conditionals/ie8.css" /><![endif]-->
 </head>
