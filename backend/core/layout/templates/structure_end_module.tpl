@@ -1,6 +1,4 @@
-					</div> <!-- .inner -->
-				</div> <!-- #contentHolder -->
-			</div> <!-- #mainHolder -->
-		</div> <!-- #main -->
-	</div> <!-- #container -->
-</div> <!-- #encloser -->
+			</div> <!-- .inner -->
+		</div> <!-- #contentHolder -->
+	</div> <!-- #main -->
+</div> <!-- #container -->
