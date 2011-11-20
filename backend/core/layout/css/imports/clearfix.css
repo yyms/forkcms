@@ -19,10 +19,9 @@
 	clear: both;
 	visibility: hidden;
 	font-size: 0;
-	line-height: 0;;
+	line-height: 0;
 }
 
-.ie6 .clearfix,
 .ie7 .clearfix {
 	zoom: 1;
 }
