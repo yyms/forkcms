@@ -427,33 +427,23 @@ div#pageTitle {
 	Pagetitle
 */
 
+.pageTitle:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; font-size: 0; line-height: 0; }
+.ie6 .pageTitle, .ie7 .pageTitle { zoom: 1; }
+
 .pageTitle {
 	margin: 0 0 12px;
 	padding: 6px 0 6px;
 	border-bottom: 1px solid #DDD;
 }
 
-.pageTitle h2 {
-	font-size: 14px;
-	float: left;
-	padding: 2px 0 0;
-	margin: 0;
-	line-height: 22px;
-	letter-spacing: 0;
-	font-weight: 700;
-}
-
-	/* Clear it */
-	.pageTitle {
-		zoom: 1;
-	}
-
-	.pageTitle:after {
-		content: ".";
-		display: block;
-		height: 0;
-		clear: both;
-		visibility: hidden;
+	.pageTitle h2 {
+		font-size: 14px;
+		float: left;
+		padding: 2px 0 0;
+		margin: 0;
+		line-height: 22px;
+		letter-spacing: 0;
+		font-weight: 700;
 	}
 
 /*
@@ -464,11 +454,12 @@ div#pageTitle {
 	width: 100%;
 	height: 100%;
 }
-.centerItem td {
-	width: 100%;
-	height: 100%;
-	vertical-align: middle;
-}
+
+	.centerItem td {
+		width: 100%;
+		height: 100%;
+		vertical-align: middle;
+	}
 
 	.centerItem .formMessage {
 		width: 50%;
