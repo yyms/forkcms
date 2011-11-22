@@ -22,12 +22,12 @@ body {
 
 	#container {
 		height: 100%;
-		overflow: hidden;
 		padding: 0 24px;
-		width: 100%;
 		min-width: 960px;
 		max-width: 1226px;
 		margin: 0 auto;
+		position: relative;
+		z-index: 1000;
 	}
 
 		#main {
@@ -61,15 +61,18 @@ body {
 		}
 
 			#contentHolder {
-				float: right;
-				width: 100%;
-				min-width: 786px;
+				float: left;
+				min-width: 796px;
+				max-width: 1060px;
+/*				min-width: 786px;
 				max-width: 1052px;
-			}
+*/			}
 
 				#contentHolder .inner {
 					padding: 24px 24px 24px 9px;
 					background: #FAFAFA;
+					min-width: 763px;
+					max-width: 1027px;
 				}
 
 #sidebar {
@@ -95,6 +98,7 @@ body {
 
 #headerHolder #header {
 	height: 36px;
+	margin: 0 1px;
 }
 
 	/* Site title */
@@ -141,7 +145,8 @@ body {
 					border-bottom: none;
 					float: left;
 					margin: 10px 4px 0 0;
-					padding: 7px 17px;
+/*					padding: 7px 17px;*/
+					padding: 0.7em 1.4em;
 					position: relative;
 					top: 1px;
 					line-height: 1;
