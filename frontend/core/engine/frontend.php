@@ -43,13 +43,21 @@ class Frontend
 			$facebook = new Facebook($facebookApplicationSecret, $facebookApplicationId);
 
 			// get the cookie, this will set the access token.
-			$facebook->getCookie();
+			$data = $facebook->getCookie();
+
+			// define some constant that can be used in the templates
+			define('FACEBOOK_HAS_APP', true);
 
 			// store in reference
 			Spoon::set('facebook', $facebook);
 
 			// trigger event
 			FrontendModel::triggerEvent('core', 'after_facebook_initialization');
+		}
+
+		else
+		{
+			define('FACEBOOK_HAS_APP', false);
 		}
 	}
 }

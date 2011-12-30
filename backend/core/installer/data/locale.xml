@@ -1397,6 +1397,10 @@
         <translation language="cn"><![CDATA[%1$s在 <a href="%2$s">%3$s</a>发表了评论。 <a href="%4$s">审核通过</a> 这条评论并发布。]]></translation>
         <translation language="de"><![CDATA[%1$s kommentierte <a href="%2$s">%3$s</a>. <a href="%4$s">Moderiere</a> den Kommentar um ihn zu veröffentlichen.]]></translation>
       </item>
+      <item type="message" name="BlogFacebookPublishCommentMessage">
+        <translation language="nl"><![CDATA[Ik reageerde op %1$s.]]></translation>
+        <translation language="en"><![CDATA[I commented on %1$s.]]></translation>
+      </item>
       <item type="message" name="BlogNoComments">
         <translation language="nl"><![CDATA[Reageer als eerste]]></translation>
         <translation language="en"><![CDATA[Be the first to comment]]></translation>
@@ -1798,6 +1802,10 @@
         <translation language="es"><![CDATA[Tu pregunta ha sido enviada. Te responderemos lo más pronto como nos sea posible.]]></translation>
         <translation language="de"><![CDATA[Deine Frage wurde übermittelt. Wir werden sie schnellstmöglich beantworten.]]></translation>
       </item>
+      <item type="message" name="PublishOnFacebook">
+        <translation language="nl"><![CDATA[Publiceer op Facebook.]]></translation>
+        <translation language="en"><![CDATA[Publish on Facebook.]]></translation>
+      </item>
       <item type="message" name="QuestionsInSameCategory">
         <translation language="nl"><![CDATA[Andere vragen in deze categorie]]></translation>
         <translation language="en"><![CDATA[Other questions in this category]]></translation>
@@ -2161,6 +2169,10 @@
         <translation language="cn"><![CDATA[这个Email地址不存在。]]></translation>
         <translation language="de"><![CDATA[Diese E-Mail-Adresse ist nicht in unserer Datenbank.]]></translation>
         <translation language="es"><![CDATA[Esta dirección de e-mail no se encuentra en nuestra base de datos.]]></translation>
+      </item>
+      <item type="error" name="FacebookNoPermissionsToPublish">
+        <translation language="nl"><![CDATA[Je hebt geen rechten gegeven om te publiceren op Facebook.]]></translation>
+        <translation language="en"><![CDATA[You didn't give us permission to publish on Facebook.]]></translation>
       </item>
       <item type="error" name="FeedbackIsRequired">
         <translation language="nl"><![CDATA[Gelieve feedback te geven.]]></translation>

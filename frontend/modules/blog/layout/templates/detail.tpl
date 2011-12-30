@@ -130,6 +130,15 @@
 							<label for="message">{$lblMessage|ucfirst}<abbr title="{$lblRequiredField}">*</abbr></label>
 							{$txtMessage} {$txtMessageError}
 						</p>
+						
+						{option:FACEBOOK_HAS_APP}
+							<ul class="inputlist">
+								<li>
+									<label for="publishToFacebook">{$chkPublishToFacebook} {$msgPublishOnFacebook}</label>
+								</li>
+							</ul>
+						{/option:FACEBOOK_HAS_APP}
+						
 						<p>
 							<input class="inputSubmit" type="submit" name="comment" value="{$msgComment|ucfirst}" />
 						</p>

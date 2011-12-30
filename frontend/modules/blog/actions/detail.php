@@ -111,15 +111,19 @@ class FrontendBlogDetail extends FrontendBaseBlock
 		$this->frm->setAction($this->frm->getAction() . '#' . FL::act('Comment'));
 
 		// init vars
-		$author = (SpoonCookie::exists('comment_author')) ? SpoonCookie::get('comment_author') : null;
-		$email = (SpoonCookie::exists('comment_email')) ? SpoonCookie::get('comment_email') : null;
-		$website = (SpoonCookie::exists('comment_website')) ? SpoonCookie::get('comment_website') : 'http://';
+		$author = (SpoonCookie::exists('comment_author')) ? (string) SpoonCookie::get('comment_author') : null;
+		$email = (SpoonCookie::exists('comment_email')) ? (string) SpoonCookie::get('comment_email') : null;
+		$website = (SpoonCookie::exists('comment_website')) ? (string) SpoonCookie::get('comment_website') : 'http://';
+		$publishToFacebook = (SpoonCookie::exists('comment_publish_to_facebook')) ? (bool) SpoonCookie::get('comment_publish_to_facebook') : false;
 
 		// create elements
 		$this->frm->addText('author', $author);
 		$this->frm->addText('email', $email);
 		$this->frm->addText('website', $website, null);
 		$this->frm->addTextarea('message');
+
+		// add a checkbox to allow people to publish their comment to facebook
+		if(FACEBOOK_HAS_APP) $this->frm->addCheckbox('publish_to_facebook', $publishToFacebook, 'inputCheckbox publishToFacebookCheckbox', 'inputCheckboxError publishToFacebookCheckbox');
 	}
 
 	/**
@@ -292,6 +296,29 @@ class FrontendBlogDetail extends FrontendBaseBlock
 				// insert comment
 				$comment['id'] = FrontendBlogModel::insertComment($comment);
 
+				if(FACEBOOK_HAS_APP && $this->frm->getField('publish_to_facebook')->getChecked())
+				{
+					// get facebook instance
+					$facebook = Spoon::get('facebook');
+
+					// build the post
+					$post = array();
+					$post['message'] = sprintf(FL::msg('BlogFacebookPublishCommentMessage'), $this->record['title']);
+					$post['link'] = SITE_URL . $this->record['full_url'];
+					$post['name'] = $this->record['title'];
+
+					try
+					{
+						// publish the post
+						$facebook->publish('/me/feed', $post);
+					}
+					catch(FacebookException $e)
+					{
+						if(SPOON_DEBUG) throw $e;
+					}
+				}
+
+
 				// trigger event
 				FrontendModel::triggerEvent('blog', 'after_add_comment', array('comment' => $comment));
 
@@ -325,6 +352,7 @@ class FrontendBlogDetail extends FrontendBaseBlock
 					SpoonCookie::set('comment_author', $author, (30 * 24 * 60 * 60), '/', '.' . $this->URL->getDomain());
 					SpoonCookie::set('comment_email', $email, (30 * 24 * 60 * 60), '/', '.' . $this->URL->getDomain());
 					SpoonCookie::set('comment_website', $website, (30 * 24 * 60 * 60), '/', '.' . $this->URL->getDomain());
+					if(FACEBOOK_HAS_APP) SpoonCookie::set('comment_publish_to_facebook', $this->frm->getField('publish_to_facebook')->getChecked(), (30 * 24 * 60 * 60), '/', '.' . $this->URL->getDomain());
 				}
 				catch(Exception $e)
 				{

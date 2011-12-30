@@ -320,10 +320,10 @@ class FrontendTemplate extends SpoonTemplate
 		// execute addslashes on the values for the locale, will be used in JS
 		if($this->addSlashes)
 		{
-			foreach($actions['core'] as &$value) $value = addslashes($value);
-			foreach($errors['core'] as &$value) $value = addslashes($value);
-			foreach($labels['core'] as &$value) $value = addslashes($value);
-			foreach($messages['core'] as &$value) $value = addslashes($value);
+			foreach($actions as &$value) $value = addslashes((string) $value);
+			foreach($errors as &$value) $value = addslashes((string) $value);
+			foreach($labels as &$value) $value = addslashes((string) $value);
+			foreach($messages as &$value) $value = addslashes((string) $value);
 		}
 
 		// assign actions

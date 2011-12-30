@@ -96,6 +96,94 @@ jsFrontend.facebook =
 			// subscribe and track message
 			FB.Event.subscribe('message.send', function(targetUrl) { _gaq.push(['_trackSocial', 'facebook', 'send', targetUrl]); });
 		}
+
+		$('.publishToFacebookCheckbox').on('change', jsFrontend.facebook.checkPublishPermissions).trigger('change');
+	},
+
+	checkPublishPermissions: function(e)
+	{
+		// find element
+		var $this = $(this);
+
+		if($this.is(':checked'))
+		{
+			// we should ask for the permissions
+			jsFrontend.facebook.askPermissions(
+				'publish_stream',
+				function(response)
+				{
+					// if we don't have permissions, we should uncheck the checkbox and show an error
+					if(response === false)
+					{
+						var $closest = $this.closest('li, p, div');
+
+						$this.attr('checked', false)
+						$closest.find('formError').remove();
+						$closest('li, p, div').addClass('errorArea').append('<span class="formError">{$errFacebookNoPermissionsToPublish}</span>');
+					}
+				}
+			);
+		}
+	},
+
+	askPermissions: function(scope, callback)
+	{
+		// validate callback
+		if(typeof eval(callback) != 'function') return false;
+
+		// check if the user is connected
+		FB.getLoginStatus(
+			function(response)
+			{
+				// user is not logged in or hasn't authorized our app
+				if(response.status !== 'connected')
+				{
+					FB.login(
+						function(response)
+						{
+							// user is connected and has authorized our app
+							if(response.authResponse)
+							{
+								// grab the permissions
+								FB.api(
+									'/me/permissions',
+									function(response)
+									{
+										// if the request permissions isn't available, we should answer with false
+										if(typeof response.data[0][scope] == 'undefined' || response.data[0][scope] == 0) response = false;
+
+										// execute the callback
+										callback.call(null, response);
+									}
+								);
+							}
+
+							// user isn't connected, so execute the callback with a false response
+							else callback.call(null, false);
+						},
+						{ scope: scope }
+					);
+				}
+
+				else
+				{
+					// grab the permissions
+					FB.api(
+						'/me/permissions',
+						function(newResponse)
+						{
+							// @todo	this should be extended, or the extra permissions should be enforced...
+
+							// if the request permissions isn't available, we should answer with false
+							if(typeof newResponse.data[0][scope] == 'undefined' || newResponse.data[0][scope] == 0) response = false;
+
+							// execute the callback
+							callback.call(null, response);
+						}
+					);
+				}
+			}
+		);
 	}
 }
 
