@@ -1,5 +1,2 @@
-				</div>
-			</div>
-		</td>
-	</tr>
-</table>
+		</div> <!-- #main -->
+	</div> <!-- #container -->
