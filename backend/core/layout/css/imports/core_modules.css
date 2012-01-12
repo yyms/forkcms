@@ -19,6 +19,7 @@
 #pagesTree {
 	width: 264px;
 	height: 100%;
+	float: left;
 }
 
 	#pagesTree #treeHolder {
@@ -87,14 +88,12 @@
 		margin-top: 24px;
 		margin-right: 9px;
 
-		/* @inc .topRc */
 		-webkit-border-top-left-radius: 4px;
 		-webkit-border-top-right-radius: 4px;
 		-moz-border-radius-topleft: 4px;
 		-moz-border-radius-topright: 4px;
 		border-top-left-radius: 4px;
 		border-top-right-radius: 4px;
-
 	}
 
 	#pages.index #treeOptions {

@@ -33,7 +33,6 @@ body {
 		#main {
 			background: #FAFAFA;
 			border: 1px solid #BED7E9;
-			border-top: none;
 			*height: auto; /* IE7 */
 		}
 

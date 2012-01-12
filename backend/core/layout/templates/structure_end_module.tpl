@@ -1,4 +1,4 @@
-			</div> <!-- .inner -->
-		</div> <!-- #contentHolder -->
-	</div> <!-- #main -->
-</div> <!-- #container -->
+				</div> <!-- .inner -->
+			</div> <!-- #contentHolder -->
+		</div> <!-- #main -->
+	</div> <!-- #container -->

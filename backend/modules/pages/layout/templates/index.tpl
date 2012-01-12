@@ -1,7 +1,6 @@
 {include:{$BACKEND_CORE_PATH}/layout/templates/head.tpl}
 {include:{$BACKEND_MODULES_PATH}/pages/layout/templates/structure_start.tpl}
 
-
 <div class="pageTitle">
 	<h2>
 		{option:dgDrafts}{$lblDrafts|ucfirst}{/option:dgDrafts}
