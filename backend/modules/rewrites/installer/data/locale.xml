@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale>
+  <backend>
+    <core>
+      <item type="label" name="Rewrites">
+        <translation language="nl"><![CDATA[rewrites]]></translation>
+        <translation language="en"><![CDATA[rewrites]]></translation>
+        <translation language="hu"><![CDATA[]]></translation>
+        <translation language="it"><![CDATA[]]></translation>
+        <translation language="ru"><![CDATA[]]></translation>
+        <translation language="cn"><![CDATA[]]></translation>
+        <translation language="de"><![CDATA[]]></translation>
+        <translation language="fr"><![CDATA[]]></translation>
+        <translation language="es"><![CDATA[]]></translation>
+      </item>
+    </core>
+    <rewrites>
+      <item type="label" name="Destination">
+        <translation language="nl"><![CDATA[bestemming]]></translation>
+        <translation language="en"><![CDATA[destination]]></translation>
+        <translation language="hu"><![CDATA[]]></translation>
+        <translation language="it"><![CDATA[]]></translation>
+        <translation language="ru"><![CDATA[]]></translation>
+        <translation language="cn"><![CDATA[]]></translation>
+        <translation language="de"><![CDATA[]]></translation>
+        <translation language="fr"><![CDATA[]]></translation>
+        <translation language="es"><![CDATA[]]></translation>
+      </item>
+      <item type="label" name="RegularExpression">
+        <translation language="nl"><![CDATA[reguliere expressie]]></translation>
+        <translation language="en"><![CDATA[regular expression]]></translation>
+        <translation language="hu"><![CDATA[]]></translation>
+        <translation language="it"><![CDATA[]]></translation>
+        <translation language="ru"><![CDATA[]]></translation>
+        <translation language="cn"><![CDATA[]]></translation>
+        <translation language="de"><![CDATA[]]></translation>
+        <translation language="fr"><![CDATA[]]></translation>
+        <translation language="es"><![CDATA[]]></translation>
+      </item>
+      <item type="label" name="Source">
+        <translation language="nl"><![CDATA[bron]]></translation>
+        <translation language="en"><![CDATA[source]]></translation>
+        <translation language="hu"><![CDATA[]]></translation>
+        <translation language="it"><![CDATA[]]></translation>
+        <translation language="ru"><![CDATA[]]></translation>
+        <translation language="cn"><![CDATA[]]></translation>
+        <translation language="de"><![CDATA[]]></translation>
+        <translation language="fr"><![CDATA[]]></translation>
+        <translation language="es"><![CDATA[]]></translation>
+      </item>
+    </rewrites>
+  </backend>
+</locale>
