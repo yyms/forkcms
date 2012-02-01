@@ -26,7 +26,7 @@ class BackendRewritesIndex extends BackendBaseActionIndex
 	{
 		$this->dataGrid = new BackendDataGridDB(BackendRewritesModel::QRY_DATAGRID_BROWSE);
 
-		// labels
+		// label
 		$this->dataGrid->setHeaderLabels(
 			array('is_regexp' => ucfirst(BL::lbl('RegularExpression')))
 		);
