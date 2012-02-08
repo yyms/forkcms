@@ -4,7 +4,7 @@
 {form:add}
 	<div class="box">
 		<div class="heading">
-			<h3>{$lblRewrites|ucfirst}: {$lblAdd|ucfirst}</h3>
+			<h3>{$lblRedirects|ucfirst}: {$lblAdd|ucfirst}</h3>
 		</div>
 		<div class="options horizontal">
 			<p>

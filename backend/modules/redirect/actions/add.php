@@ -12,7 +12,7 @@
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class BackendRewritesAdd extends BackendBaseActionAdd
+class BackendRedirectAdd extends BackendBaseActionAdd
 {
 	public function execute()
 	{
@@ -50,7 +50,7 @@ class BackendRewritesAdd extends BackendBaseActionAdd
 					'edited_on' => BackendModel::getUTCDate()
 				);
 
-				$id = BackendRewritesModel::insert($item);
+				$id = BackendRedirectModel::insert($item);
 
 				// hook
 				BackendModel::triggerEvent($this->getModule(), 'after_add', array('item' => $item));

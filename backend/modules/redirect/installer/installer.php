@@ -8,13 +8,13 @@
  */
 
 /**
- * Installer for the rewrites module
+ * Installer for the redirect module
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class RewritesInstaller extends ModuleInstaller
+class RedirectInstaller extends ModuleInstaller
 {
-	const MODULE = 'rewrites';
+	const MODULE = 'redirect';
 
 	public function install()
 	{
@@ -38,6 +38,6 @@ class RewritesInstaller extends ModuleInstaller
 
 		// set navigation
 		$navigationModulesId = $this->setNavigation(null, 'Modules');
-		$this->setNavigation($navigationModulesId, 'Rewrites', 'rewrites/index', array('rewrites/add', 'rewrites/edit'));
+		$this->setNavigation($navigationModulesId, 'Redirects', 'redirect/index', array('redirect/add', 'redirect/edit'));
 	}
 }

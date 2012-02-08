@@ -8,15 +8,15 @@
  */
 
 /**
- * In this file we store all generic functions that we will be using in the blog module
+ * In this file we store all generic functions that we will be using in the redirect module
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class BackendRewritesModel
+class BackendRedirectModel
 {
 	const QRY_DATAGRID_BROWSE =
 		'SELECT i.id, i.source, i.destination, i.is_regexp, UNIX_TIMESTAMP(i.created_on) AS created_on
-		 FROM rewrites AS i';
+		 FROM redirects AS i';
 
 	/**
 	 * Deletes the item with the given id.
@@ -25,7 +25,7 @@ class BackendRewritesModel
 	 */
 	public static function delete($id)
 	{
-		BackendModel::getDB()->delete('rewrites', 'id = ?', (int) $id);
+		BackendModel::getDB()->delete('redirects', 'id = ?', (int) $id);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class BackendRewritesModel
 	public static function exists($id)
 	{
 		return (bool) BackendModel::getDB()->getVar(
-			'SELECT i.id FROM rewrites AS i WHERE i.id = ?', (int) $id
+			'SELECT i.id FROM redirects AS i WHERE i.id = ?', (int) $id
 		);
 	}
 
@@ -51,7 +51,7 @@ class BackendRewritesModel
 	{
 		return (array) BackendModel::getDB()->getRecord(
 			'SELECT i.*, UNIX_TIMESTAMP(i.created_on) AS created_on, UNIX_TIMESTAMP(i.edited_on) AS edited_on
-			 FROM rewrites AS i
+			 FROM redirects AS i
 			 WHERE i.id = ?',
 			(int) $id
 		);
@@ -63,7 +63,7 @@ class BackendRewritesModel
 	 */
 	public static function insert(array $item)
 	{
-		return BackendModel::getDB()->insert('rewrites', $item);
+		return BackendModel::getDB()->insert('redirects', $item);
 	}
 
 	/**
@@ -73,6 +73,6 @@ class BackendRewritesModel
 	 */
 	public static function update($id, array $item)
 	{
-		return BackendModel::getDB()->update('rewrites', $item, 'id = ?', (int) $id);
+		return BackendModel::getDB()->update('redirects', $item, 'id = ?', (int) $id);
 	}
 }

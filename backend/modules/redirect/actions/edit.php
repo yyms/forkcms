@@ -12,13 +12,13 @@
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class BackendRewritesEdit extends BackendBaseActionEdit
+class BackendRedirectEdit extends BackendBaseActionEdit
 {
 	public function execute()
 	{
 		$this->id = $this->getParameter('id', 'int');
 
-		if($this->id !== null && BackendRewritesModel::exists($this->id))
+		if($this->id !== null && BackendRedirectModel::exists($this->id))
 		{
 			parent::execute();
 
@@ -35,7 +35,7 @@ class BackendRewritesEdit extends BackendBaseActionEdit
 
 	protected function getData()
 	{
-		$this->record = (array) BackendRewritesModel::get($this->id);
+		$this->record = (array) BackendRedirectModel::get($this->id);
 
 		// no item found
 		if(empty($this->record))
@@ -76,7 +76,7 @@ class BackendRewritesEdit extends BackendBaseActionEdit
 					'edited_on' => BackendModel::getUTCDate()
 				);
 
-				BackendRewritesModel::update($this->id, $item);
+				BackendRedirectModel::update($this->id, $item);
 
 				// hooks
 				BackendModel::triggerEvent($this->getModule(), 'after_edit', array('item' => $item));

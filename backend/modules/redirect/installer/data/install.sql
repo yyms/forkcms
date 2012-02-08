@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `rewrites` (
+CREATE TABLE IF NOT EXISTS `redirects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `source` text NOT NULL,
   `destination` text NOT NULL,

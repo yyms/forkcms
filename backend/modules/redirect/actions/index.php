@@ -8,11 +8,11 @@
  */
 
 /**
- * This is the index-action (default), it will display the overview of rewrites
+ * This is the index-action (default), it will display the overview of redirects
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class BackendRewritesIndex extends BackendBaseActionIndex
+class BackendRedirectIndex extends BackendBaseActionIndex
 {
 	public function execute()
 	{
@@ -24,7 +24,7 @@ class BackendRewritesIndex extends BackendBaseActionIndex
 
 	protected function loadDataGrid()
 	{
-		$this->dataGrid = new BackendDataGridDB(BackendRewritesModel::QRY_DATAGRID_BROWSE);
+		$this->dataGrid = new BackendDataGridDB(BackendRedirectModel::QRY_DATAGRID_BROWSE);
 
 		// label
 		$this->dataGrid->setHeaderLabels(

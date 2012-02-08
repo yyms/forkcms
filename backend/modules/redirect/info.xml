@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-	<name>rewrites</name>
+	<name>redirect</name>
 	<version>1.0.0</version>
 	<requirements>
 		<minimum_version>2.0.0</minimum_version>
@@ -9,7 +9,7 @@
 		<![CDATA[
 			When migrating to a new website, you want to be redirect old urls to their new location.
 			* list source/destination urls
-			* use regex patterns for complexe redirects
+			* use regex patterns for complex redirects
 		]]>
 	</description>
 	<authors>
@@ -19,8 +19,8 @@
 		</author>
 	</authors>
 	<events>
-		<event application="backend" name="after_add"><![CDATA[Triggered when a rewrite is added.]]></event>
-		<event application="backend" name="after_delete"><![CDATA[Triggered when a rewrite is deleted.]]></event>
-		<event application="backend" name="after_edit"><![CDATA[Triggered when a rewrite is edited.]]></event>
+		<event application="backend" name="after_add"><![CDATA[Triggered when a redirect is added.]]></event>
+		<event application="backend" name="after_delete"><![CDATA[Triggered when a redirect is deleted.]]></event>
+		<event application="backend" name="after_edit"><![CDATA[Triggered when a redirect is edited.]]></event>
 	</events>
 </module>

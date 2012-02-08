@@ -3,7 +3,7 @@
 
 <div class="pageTitle">
 	<h2>
-		{$lblRewrites|ucfirst}:
+		{$lblRedirects|ucfirst}:
 	</h2>
 
 	<div class="buttonHolderRight">

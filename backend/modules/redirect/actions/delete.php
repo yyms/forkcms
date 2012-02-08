@@ -8,21 +8,21 @@
  */
 
 /**
- * This action will delete a rewrite rule.
+ * This action will delete a redirect rule.
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class BackendRewritesDelete extends BackendBaseActionDelete
+class BackendRedirectDelete extends BackendBaseActionDelete
 {
 	public function execute()
 	{
 		$this->id = $this->getParameter('id', 'int');
 
-		if($this->id !== null && BackendRewritesModel::exists($this->id))
+		if($this->id !== null && BackendRedirectModel::exists($this->id))
 		{
 			parent::execute();
 
-			BackendRewritesModel::delete($this->id);
+			BackendRedirectModel::delete($this->id);
 
 			// hooks
 			BackendModel::triggerEvent($this->getModule(), 'after_delete', array('id' => $this->id));

@@ -8,11 +8,11 @@
  */
 
 /**
- * This is the configuration-object for the rewrites module
+ * This is the configuration-object for the redirect module
  *
  * @author Davy Hellemans <davy.hellemans@netlash.com>
  */
-class BackendRewritesConfig extends BackendBaseConfig
+class BackendRedirectConfig extends BackendBaseConfig
 {
 	/**
 	 * The default action
