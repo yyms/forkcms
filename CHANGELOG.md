@@ -1,4 +1,4 @@
-3.2.4 (xxxx-xx-xx)
+3.2.4 (2012-02-07)
 --
 Improvements:
 
@@ -6,10 +6,17 @@ Improvements:
 * Core: integrated new JS minifier (strip whitespace, strip comments)
 * Core: replaced both different frontend & backend minifiers, by this new minifier.
 * Share: Twitter now uses title instead of description + language attribute added
+* Core: When a user doesn't have sufficient rights to access a page, he will now be redirected with the proper error code (307).
+* Extensions: Modules with warnings will now be greyed out so they can be spotted easily.
 
 Bugfixes:
 
 * Location: fixed a javascript error with jquery.
+* Location: fix vertical scrollbar inside info window.
+* CSS: fixed Safari bug for DataGrid in Tabs #212
+* Pages: subpages in the footer are now visible in the backend.
+* Pages: default template wasn't used when adding a page.
+
 
 3.2.3 (2012-01-31)
 --

@@ -116,7 +116,7 @@ class MinifyCSS extends Minify
 					$importContent = $this->move($importPath, $source, $importContent);
 
 					// check if this is only valid for certain media
-					if($match['media']) $importContent = '@media '. $match['media'] . '{' . "\n" . $importContent . "\n" . '}';
+					if($match['media']) $importContent = '@media ' . $match['media'] . '{' . "\n" . $importContent . "\n" . '}';
 
 					// add to replacement array
 					$search[] = $match[0];
@@ -268,14 +268,14 @@ class MinifyCSS extends Minify
 	}
 
 	/**
-	 * Import images into the CSS, base64-ized.
+	 * Import files into the CSS, base64-ized.
 	 * @url(image.jpg) images will be loaded and their content merged into the original file, to save HTTP requests.
 	 *
-	 * @param string $source The file to import images for.
+	 * @param string $source The file to import files for.
 	 * @param string[optional] $path The path the data should be written to.
 	 * @return string
 	 */
-	public function importImages($source, $path = false)
+	public function importFiles($source, $path = false)
 	{
 		// little "hack" for internal use
 		$content = @func_get_arg(2);
@@ -286,7 +286,7 @@ class MinifyCSS extends Minify
 		// validate data
 		if($content == $source) throw new MinifyException('The data for "' . $source . '" could not be loaded, please make sure the path is correct.');
 
-		if(preg_match_all('/url\((["\']?)((?!["\']?data:).*?\.(gif|png|jpg|jpeg|tiff|svg))\\1\)/i', $content, $matches, PREG_SET_ORDER))
+		if(preg_match_all('/url\((["\']?)((?!["\']?data:).*?\.(gif|png|jpg|jpeg|svg|woff))\\1\)/i', $content, $matches, PREG_SET_ORDER))
 		{
 			$search = array();
 			$replace = array();
@@ -309,7 +309,21 @@ class MinifyCSS extends Minify
 
 					// build replacement
 					$search[] = $match[0];
-					$replace[] = 'url(data:image/' . $match[3] . ';base64,' . $importContent  .')';
+
+					switch($match[3])
+					{
+						case 'woff':
+							$replace[] = 'url(data:application/x-font-woff;base64,' . $importContent  . ')';
+							break;
+
+						case 'svg':
+							$replace[] = 'url(data:image/svg+xml;base64,' . $importContent  . ')';
+							break;
+
+						default:
+							$replace[] = 'url(data:image/' . $match[3] . ';base64,' . $importContent  . ')';
+							break;
+					}
 				}
 			}
 
@@ -328,9 +342,14 @@ class MinifyCSS extends Minify
 	 * Perform CSS optimizations.
 	 *
 	 * @param string[optional] $path The path the data should be written to.
+	 * @param bool[optional] $stripComments Should comments be stripped?
+	 * @param bool[optional] $stripWhitespace Should whitespace be stripped?
+	 * @param bool[optional] $shortenHex Should hex-colors be shortened?
+	 * @param bool[optional] $combineImports Should @imports statements be combined?
+	 * @param bool[optional] $importFiles Should referenced files be imported?
 	 * @return string The minified data.
 	 */
-	public function minify($path = false, $stripComments = true, $stripWhitespace = true, $shortenHex = true, $combineImports = true, $importImages = true)
+	public function minify($path = false, $stripComments = true, $stripWhitespace = true, $shortenHex = true, $combineImports = true, $importFiles = true)
 	{
 		$content = '';
 
@@ -344,11 +363,11 @@ class MinifyCSS extends Minify
 			$content .= $css;
 		}
 
+		if($combineImports) $content = $this->combineImports($path, false, $content);
 		if($stripComments) $content = $this->stripComments($content);
 		if($stripWhitespace) $content = $this->stripWhitespace($content);
 		if($shortenHex) $content = $this->shortenHex($content);
-		if($combineImports) $content = $this->combineImports($path, false, $content);
-		if($importImages) $content = $this->importImages($path, false, $content);
+		if($importFiles) $content = $this->importFiles($path, false, $content);
 
 		// save to path
 		if($path !== false) $this->save($content, $path);
@@ -685,6 +704,8 @@ class MinifyJS extends Minify
 	 * Perform JS optimizations.
 	 *
 	 * @param string[optional] $path The path the data should be written to.
+	 * @param bool[optional] $stripComments Should comments be stripped?
+	 * @param bool[optional] $stripWhitespace Should whitespace be stripped?
 	 * @return string The minified data.
 	 */
 	public function minify($path = false, $stripComments = true, $stripWhitespace = true)
@@ -852,7 +873,8 @@ abstract class Minify
 	public function __construct()
 	{
 		// it's possible to add the css through the constructor as well ;)
-		if(func_num_args()) call_user_func_array(array($this, 'add'), func_get_args());
+		$arguments = func_get_args();
+		if(func_num_args()) call_user_func_array(array($this, 'add'), $arguments);
 	}
 
 	/**
@@ -898,14 +920,6 @@ abstract class Minify
 		// no file, just return the data itself
 		else return $data;
 	}
-
-	/**
-	 * Minify the data.
-	 *
-	 * @param string[optional] $path The path the data should be written to.
-	 * @return string The minified data.
-	 */
-	abstract public function minify($path = null);
 
 	/**
 	 * Save to file
