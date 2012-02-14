@@ -66,6 +66,17 @@ class FrontendURL
 	}
 
 	/**
+	 * Checks the given URL to see if redirect rules are in place to make it go somewhere else.
+	 *
+	 * @param string $URL
+	 */
+	protected function checkRedirects($URL)
+	{
+		// @todo check if redirect module is installed...
+		FrontendRedirectModel::redirect($URL);
+	}
+
+	/**
 	 * Get the domain
 	 *
 	 * @return string The current domain (without www.)
@@ -361,6 +372,8 @@ class FrontendURL
 		// invalid page, or parameters but no extra
 		if($pageInfo === false || (!empty($parameters) && !$pageInfo['has_extra']))
 		{
+			$this->checkRedirects($startURL);
+
 			// get 404 URL
 			$URL = FrontendNavigation::getURL(404);
 
