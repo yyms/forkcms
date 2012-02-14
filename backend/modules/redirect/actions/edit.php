@@ -49,7 +49,6 @@ class BackendRedirectEdit extends BackendBaseActionEdit
 		$this->frm = new BackendForm('edit');
 		$this->frm->addText('source', $this->record['source']);
 		$this->frm->addText('destination', $this->record['destination']);
-		$this->frm->addCheckbox('is_regexp', ($this->record['is_regexp'] == 'Y'));
 	}
 
 	protected function parse()
@@ -72,7 +71,6 @@ class BackendRedirectEdit extends BackendBaseActionEdit
 				$item = array(
 					'source' => $this->frm->getField('source')->getValue(),
 					'destination' => $this->frm->getField('destination')->getValue(),
-					'is_regexp' => ($this->frm->getField('is_regexp')->getValue()) ? 'Y' : 'N',
 					'edited_on' => BackendModel::getUTCDate()
 				);
 

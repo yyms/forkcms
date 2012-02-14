@@ -26,14 +26,9 @@ class BackendRedirectIndex extends BackendBaseActionIndex
 	{
 		$this->dataGrid = new BackendDataGridDB(BackendRedirectModel::QRY_DATAGRID_BROWSE);
 
-		// label
-		$this->dataGrid->setHeaderLabels(
-			array('is_regexp' => ucfirst(BL::lbl('RegularExpression')))
-		);
-
 		// sorting
 		$this->dataGrid->setSortingColumns(
-			array('source', 'destination', 'is_regexp', 'created_on'),
+			array('source', 'destination', 'created_on'),
 			'source'
 		);
 

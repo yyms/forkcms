@@ -28,7 +28,6 @@ class BackendRedirectAdd extends BackendBaseActionAdd
 		$this->frm = new BackendForm('add');
 		$this->frm->addText('source');
 		$this->frm->addText('destination');
-		$this->frm->addCheckbox('is_regexp');
 	}
 
 	protected function validateForm()
@@ -45,7 +44,6 @@ class BackendRedirectAdd extends BackendBaseActionAdd
 				$item = array(
 					'source' => $this->frm->getField('source')->getValue(),
 					'destination' => $this->frm->getField('destination')->getValue(),
-					'is_regexp' => ($this->frm->getField('is_regexp')->getValue()) ? 'Y' : 'N',
 					'created_on' => BackendModel::getUTCDate(),
 					'edited_on' => BackendModel::getUTCDate()
 				);

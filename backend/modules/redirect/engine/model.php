@@ -15,7 +15,7 @@
 class BackendRedirectModel
 {
 	const QRY_DATAGRID_BROWSE =
-		'SELECT i.id, i.source, i.destination, i.is_regexp, UNIX_TIMESTAMP(i.created_on) AS created_on
+		'SELECT i.id, i.source, i.destination, UNIX_TIMESTAMP(i.created_on) AS created_on
 		 FROM redirects AS i';
 
 	/**

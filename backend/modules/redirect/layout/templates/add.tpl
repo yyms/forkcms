@@ -15,10 +15,6 @@
 				<label for="destination">{$lblDestination|ucfirst}<abbr title="{$lblRequiredField}">*</abbr></label>
 				{$txtDestination} {$txtDestinationError}
 			</p>
-			<p>
-				<label for="isRegexp">{$chkIsRegexp} {$lblRegularExpression|ucfirst}</label>
-				{$chkIsRegexpError}
-			</p>
 		</div>
 	</div>
 
