@@ -1,3 +1,14 @@
+3.2.5 (2012-02-14)
+--
+Bugfixes:
+
+* Core: fixed LFI vulnerability.
+* Core: you can now override the template for sub navigation and the navigation: {$var|getsubnavigation:'page':{$page.id}:2:null:null:'subnavigation.tpl'}
+* Extensions: installing a pre-uploaded theme from the themes overview now installs the selected theme instead of the last theme.
+* Mailmotor: fix CSV address imports.
+* Pages: include footer/meta subpages in the linkedlist. 
+
+
 3.2.4 (2012-02-07)
 --
 Improvements:
