@@ -72,8 +72,10 @@ class FrontendURL
 	 */
 	protected function checkRedirects($URL)
 	{
-		// @todo check if redirect module is installed...
-		FrontendRedirectModel::redirect($URL);
+		if(is_callable('FrontendRedirectModel::redirect'))
+		{
+			FrontendRedirectModel::redirect($URL);
+		}
 	}
 
 	/**
