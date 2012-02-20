@@ -72,75 +72,97 @@ class APIInit
 	 */
 	public static function autoLoader($className)
 	{
-		// redefine
-		$className = strtolower((string) $className);
-
-		// init var
 		$pathToLoad = '';
 
-		// exceptions
-		$exceptions = array();
-		$exceptions['bl'] = BACKEND_CORE_PATH . '/engine/language.php';
-		$exceptions['api'] = API_CORE_PATH . '/1.0/engine/api.php';
-
-		// is it an exception
-		if(isset($exceptions[$className])) $pathToLoad = $exceptions[$className];
-
-		// backend
-		elseif(substr($className, 0, 7) == 'backend')
+		// namespaces used
+		if(stripos($className, '\\') !== false)
 		{
-			$pathToLoad = BACKEND_CORE_PATH . '/engine/' . str_replace('backend', '', $className) . '.php';
+			$chunks = explode('\\', $className);
+
+			// not one of the fork applications so look in library/external
+			if($chunks[0] != 'frontend' && $chunks[0] != 'backend')
+			{
+				$pathToLoad = PATH_LIBRARY . DIRECTORY_SEPARATOR . 'external' . DIRECTORY_SEPARATOR;
+				$pathToLoad .= implode(DIRECTORY_SEPARATOR, $chunks) . '.php';
+			}
+
+			// require if exists
+			if($pathToLoad != '' && SpoonFile::exists($pathToLoad))
+			{
+				require_once $pathToLoad;
+			}
 		}
 
-		// frontend
-		elseif(substr($className, 0, 8) == 'frontend')
-		{
-			$pathToLoad = FRONTEND_CORE_PATH . '/engine/' . str_replace('frontend', '', $className) . '.php';
-		}
-
-		// file check in core
-		if($pathToLoad != '' && SpoonFile::exists($pathToLoad)) require_once $pathToLoad;
-
-		// check if module file exists
+		// non namespaces
 		else
 		{
-			// we'll need the original class name again, with the uppercases
-			$className = func_get_arg(0);
+			// redefine
+			$className = strtolower((string) $className);
 
-			// split in parts
-			if(preg_match_all('/[A-Z][a-z0-9]*/', $className, $parts))
+			// exceptions
+			$exceptions = array();
+			$exceptions['bl'] = BACKEND_CORE_PATH . '/engine/language.php';
+			$exceptions['api'] = API_CORE_PATH . '/1.0/engine/api.php';
+
+			// is it an exception
+			if(isset($exceptions[$className])) $pathToLoad = $exceptions[$className];
+
+			// backend
+			elseif(substr($className, 0, 7) == 'backend')
 			{
-				// the real matches
-				$parts = $parts[0];
+				$pathToLoad = BACKEND_CORE_PATH . '/engine/' . str_replace('backend', '', $className) . '.php';
+			}
 
-				// get root path constant and see if it exists
-				$rootPath = strtoupper(array_shift($parts)) . '_PATH';
-				if(defined($rootPath))
+			// frontend
+			elseif(substr($className, 0, 8) == 'frontend')
+			{
+				$pathToLoad = FRONTEND_CORE_PATH . '/engine/' . str_replace('frontend', '', $className) . '.php';
+			}
+
+			// file check in core
+			if($pathToLoad != '' && SpoonFile::exists($pathToLoad)) require_once $pathToLoad;
+
+			// check if module file exists
+			else
+			{
+				// we'll need the original class name again, with the uppercases
+				$className = func_get_arg(0);
+
+				// split in parts
+				if(preg_match_all('/[A-Z][a-z0-9]*/', $className, $parts))
 				{
-					foreach($parts as $i => $part)
+					// the real matches
+					$parts = $parts[0];
+
+					// get root path constant and see if it exists
+					$rootPath = strtoupper(array_shift($parts)) . '_PATH';
+					if(defined($rootPath))
 					{
-						// skip the first
-						if($i == 0) continue;
-
-						// action
-						$action = strtolower(implode('_', $parts));
-
-						// module
-						$module = '';
-						for($j = 0; $j < $i; $j++) $module .= strtolower($parts[$j]) . '_';
-
-						// fix action & module
-						$action = substr($action, strlen($module));
-						$module = substr($module, 0, -1);
-
-						// file to be loaded
-						$pathToLoad = constant($rootPath) . '/modules/' . $module . '/engine/' . $action . '.php';
-
-						// if it exists, load it!
-						if($pathToLoad != '' && SpoonFile::exists($pathToLoad))
+						foreach($parts as $i => $part)
 						{
-							require_once $pathToLoad;
-							break;
+							// skip the first
+							if($i == 0) continue;
+
+							// action
+							$action = strtolower(implode('_', $parts));
+
+							// module
+							$module = '';
+							for($j = 0; $j < $i; $j++) $module .= strtolower($parts[$j]) . '_';
+
+							// fix action & module
+							$action = substr($action, strlen($module));
+							$module = substr($module, 0, -1);
+
+							// file to be loaded
+							$pathToLoad = constant($rootPath) . '/modules/' . $module . '/engine/' . $action . '.php';
+
+							// if it exists, load it!
+							if($pathToLoad != '' && SpoonFile::exists($pathToLoad))
+							{
+								require_once $pathToLoad;
+								break;
+							}
 						}
 					}
 				}
