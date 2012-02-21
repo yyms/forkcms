@@ -186,7 +186,6 @@ class FrontendBaseConfig
 		}
 	}
 }
-use Monolog\Handler\StreamHandler;
 
 /**
  * This class implements a lot of functionality that can be extended by a specific block
