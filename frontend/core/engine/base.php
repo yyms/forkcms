@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+use Common\Logger;
+
 /**
  * This class will be the base of the objects used in onsite
  *
@@ -184,6 +186,7 @@ class FrontendBaseConfig
 		}
 	}
 }
+use Monolog\Handler\StreamHandler;
 
 /**
  * This class implements a lot of functionality that can be extended by a specific block
@@ -277,6 +280,7 @@ class FrontendBaseBlock
 		$this->header = Spoon::get('header');
 		$this->URL = Spoon::get('url');
 		$this->breadcrumb = Spoon::get('breadcrumb');
+		$this->logger = new Logger($module, FRONTEND_FILES_PATH . '/log.log');
 
 		// set properties
 		$this->setModule($module);
