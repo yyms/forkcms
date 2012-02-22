@@ -30,7 +30,7 @@ class Logger extends MonologLogger
 		$logFile = (string) $logFile;
 
 		// in debug mode log all
-		$logLevel = (SPOON_DEBUG) ? MonologLogger::DEBUG : MonologLogger::WARNING;
+		$logLevel = (SPOON_DEBUG) ? MonologLogger::DEBUG : MonologLogger::INFO;
 
 		// log to rotating files
 		$this->pushHandler(new RotatingFileHandler($logFile, 0, $logLevel));
