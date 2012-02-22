@@ -85,13 +85,20 @@ class BackendInit
 	{
 		$pathToLoad = '';
 
-		// namespaces used
+	// namespaces used
 		if(stripos($className, '\\') !== false)
 		{
 			$chunks = explode('\\', $className);
 
+			// common namespace
+			if($chunks[0] == 'Common')
+			{
+				$pathToLoad = PATH_LIBRARY . DIRECTORY_SEPARATOR;
+				$pathToLoad .= strtolower(implode(DIRECTORY_SEPARATOR, $chunks)) . '.php';
+			}
+
 			// not one of the fork applications so look in library/external
-			if($chunks[0] != 'frontend' && $chunks[0] != 'backend')
+			elseif($chunks[0] != 'frontend' && $chunks[0] != 'backend')
 			{
 				$pathToLoad = PATH_LIBRARY . DIRECTORY_SEPARATOR . 'external' . DIRECTORY_SEPARATOR;
 				$pathToLoad .= implode(DIRECTORY_SEPARATOR, $chunks) . '.php';
