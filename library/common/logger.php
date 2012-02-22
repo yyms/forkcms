@@ -11,6 +11,8 @@ namespace Common;
 
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Processor\WebProcessor;
+use Monolog\Processor\IntrospectionProcessor;
 
 /**
  * This is the Fork CMS logger. It is a wrapper to Monolog.
@@ -34,5 +36,9 @@ class Logger extends MonologLogger
 
 		// log to rotating files
 		$this->pushHandler(new RotatingFileHandler($logFile, 0, $logLevel));
+
+		// log additional debug information
+		$this->pushProcessor(new WebProcessor());
+		$this->pushProcessor(new IntrospectionProcessor());
 	}
 }
