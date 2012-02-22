@@ -226,6 +226,13 @@ class FrontendBaseBlock
 	protected $header;
 
 	/**
+	 * Logger
+	 *
+	 * @var Common\Logger
+	 */
+	private $logger;
+
+	/**
 	 * The current module
 	 *
 	 * @var	string
@@ -279,7 +286,6 @@ class FrontendBaseBlock
 		$this->header = Spoon::get('header');
 		$this->URL = Spoon::get('url');
 		$this->breadcrumb = Spoon::get('breadcrumb');
-		$this->logger = new Logger($module, FRONTEND_FILES_PATH . '/log.log');
 
 		// set properties
 		$this->setModule($module);
@@ -288,9 +294,28 @@ class FrontendBaseBlock
 	}
 
 	/**
+	 * Lazy loading of common classes.
+	 *
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function __get($name)
+	{
+		if($name == 'logger')
+		{
+			if(!isset($this->logger))
+			{
+				$this->logger = new Logger($this->getModule(), FRONTEND_FILES_PATH . '/logs/default.log');
+			}
+
+			return $this->logger;
+		}
+	}
+
+	/**
 	 * Add a CSS file into the array
 	 *
-	 * @param  string $file The path for the CSS-file that should be loaded.
+	 * @param string $file The path for the CSS-file that should be loaded.
 	 * @param bool[optional] $overwritePath Whether or not to add the module to this path. Module path is added by default.
 	 * @param bool[optional] $minify Should the CSS be minified?
 	 * @param bool[optional] $addTimestamp May we add a timestamp for caching purposes?
