@@ -8,13 +8,57 @@
  */
 
 /**
+ * Base class for the backend. All other base classes should extend from this.
+ *
+ * @author Dieter Vanden Eynde <dieter@netlash.com>
+ */
+class BackendBase
+{
+	/**
+	 * Logger
+	 *
+	 * @var Common\Logger
+	 */
+	private $logger;
+
+	/**
+	 * Lazy loading of common classes.
+	 *
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function __get($name)
+	{
+		if($name == 'logger')
+		{
+			if(!isset($this->logger))
+			{
+				$this->logger = new \Common\Logger($this->getModule(), BACKEND_CACHE_PATH . '/logs/default.log');
+			}
+
+			return $this->logger;
+		}
+	}
+
+	/**
+	 * Get the module name.
+	 *
+	 * @return string
+	 */
+	protected function getModule()
+	{
+		return 'core';
+	}
+}
+
+/**
  * This class implements a lot of functionality that can be extended by a specific action
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  * @author Frederik Heyninck <frederik@figure8.be>
  * @author Davy Hellemans <davy@spoon-library.com>
  */
-class BackendBaseAction
+class BackendBaseAction extends BackendBase
 {
 	/**
 	 * The current action
@@ -415,7 +459,7 @@ class BackendBaseActionDelete extends BackendBaseAction
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  */
-class BackendBaseAJAXAction
+class BackendBaseAJAXAction extends BackendBase
 {
 	const OK = 200;
 	const BAD_REQUEST = 400;
@@ -527,7 +571,7 @@ class BackendBaseAJAXAction
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  */
-class BackendBaseConfig
+class BackendBaseConfig extends BackendBase
 {
 	/**
 	 * The default action
@@ -668,7 +712,7 @@ class BackendBaseConfig
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  * @author Dieter Vanden Eynde <dieter.vandeneynde@netlash.com>
  */
-class BackendBaseCronjob
+class BackendBaseCronjob extends BackendBase
 {
 	/**
 	 * The current action
@@ -829,7 +873,7 @@ class BackendBaseCronjob
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  */
-class BackendBaseWidget
+class BackendBaseWidget extends BackendBase
 {
 	/**
 	 * The column wherin the widget should be shown
