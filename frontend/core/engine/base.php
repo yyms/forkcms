@@ -7,15 +7,21 @@
  * file that was distributed with this source code.
  */
 
-use Common\Logger;
-
 /**
  * This class will be the base of the objects used in onsite
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
+ * @author Dieter Vanden Eynde <dieter@netlash.com>
  */
 class FrontendBaseObject
 {
+	/**
+	 * Logger
+	 *
+	 * @var Common\Logger
+	 */
+	private $logger;
+
 	/**
 	 * Template instance
 	 *
@@ -41,6 +47,35 @@ class FrontendBaseObject
 		// get URL from reference
 		$this->URL = Spoon::get('url');
 	}
+
+	/**
+	 * Lazy loading of common classes.
+	 *
+	 * @param string $name
+	 * @return mixed
+	 */
+	public function __get($name)
+	{
+		if($name == 'logger')
+		{
+			if(!isset($this->logger))
+			{
+				$this->logger = new \Common\Logger($this->getModule(), FRONTEND_FILES_PATH . '/logs/default.log');
+			}
+
+			return $this->logger;
+		}
+	}
+
+	/**
+	 * Get the module name.
+	 *
+	 * @return string
+	 */
+	protected function getModule()
+	{
+		return 'core';
+	}
 }
 
 /**
@@ -48,7 +83,7 @@ class FrontendBaseObject
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  */
-class FrontendBaseConfig
+class FrontendBaseConfig extends FrontendBaseObject
 {
 	/**
 	 * The default action
@@ -195,7 +230,7 @@ class FrontendBaseConfig
  * @author Dieter Vanden Eynde <dieter@dieterve.be>
  * @author Matthias Mullie <matthias@mullie.eu>
  */
-class FrontendBaseBlock
+class FrontendBaseBlock extends FrontendBaseObject
 {
 	/**
 	 * The current action
@@ -224,13 +259,6 @@ class FrontendBaseBlock
 	 * @var	FrontendHeader
 	 */
 	protected $header;
-
-	/**
-	 * Logger
-	 *
-	 * @var Common\Logger
-	 */
-	private $logger;
 
 	/**
 	 * The current module
@@ -291,25 +319,6 @@ class FrontendBaseBlock
 		$this->setModule($module);
 		$this->setAction($action);
 		$this->setData($data);
-	}
-
-	/**
-	 * Lazy loading of common classes.
-	 *
-	 * @param string $name
-	 * @return mixed
-	 */
-	public function __get($name)
-	{
-		if($name == 'logger')
-		{
-			if(!isset($this->logger))
-			{
-				$this->logger = new Logger($this->getModule(), FRONTEND_FILES_PATH . '/logs/default.log');
-			}
-
-			return $this->logger;
-		}
 	}
 
 	/**
@@ -682,7 +691,7 @@ class FrontendBaseBlock
  * @author Dieter Vanden Eynde <dieter@dieterve.be>
  * @author Matthias Mullie <matthias@mullie.eu>
  */
-class FrontendBaseWidget
+class FrontendBaseWidget extends FrontendBaseObject
 {
 	/**
 	 * The current action
@@ -929,7 +938,7 @@ class FrontendBaseWidget
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  */
-class FrontendBaseAJAXAction
+class FrontendBaseAJAXAction extends FrontendBaseObject
 {
 	const OK = 200;
 	const BAD_REQUEST = 400;
