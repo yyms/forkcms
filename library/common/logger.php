@@ -10,7 +10,7 @@
 namespace Common;
 
 use Monolog\Logger as MonologLogger;
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\RotatingFileHandler;
 
 /**
  * This is the Fork CMS logger. It is a wrapper to Monolog.
@@ -19,6 +19,10 @@ use Monolog\Handler\StreamHandler;
  */
 class Logger extends MonologLogger
 {
+	/**
+	 * @param string $channel
+	 * @param string $logFile
+	 */
 	public function __construct($channel, $logFile)
 	{
 		parent::__construct($channel);
@@ -28,7 +32,7 @@ class Logger extends MonologLogger
 		// in debug mode log all
 		$logLevel = (SPOON_DEBUG) ? MonologLogger::DEBUG : MonologLogger::WARNING;
 
-		// log to files
-		$this->pushHandler(new StreamHandler($logFile, $logLevel));
+		// log to rotating files
+		$this->pushHandler(new RotatingFileHandler($logFile, 0, $logLevel));
 	}
 }
