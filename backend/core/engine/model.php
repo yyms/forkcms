@@ -1190,11 +1190,8 @@ class BackendModel
 		$module = (string) $module;
 		$eventName = (string) $eventName;
 
-		// create log instance
-		$log = new SpoonLog('custom', PATH_WWW . '/backend/cache/logs/events');
-
-		// logging when we are in debugmode
-		if(SPOON_DEBUG) $log->write('Event (' . $module . '/' . $eventName . ') triggered.');
+		$logger = new \Common\Logger('core', BACKEND_CACHE_PATH . '/logs/events.log');
+		$logger->debug('Event (' . $module . '/' . $eventName . ') triggered.');
 
 		// get all items that subscribe to this event
 		$subscriptions = (array) self::getDB()->getRecords(
@@ -1223,8 +1220,7 @@ class BackendModel
 				// add
 				$queuedItems[] = self::getDB(true)->insert('hooks_queue', $item);
 
-				// logging when we are in debugmode
-				if(SPOON_DEBUG) $log->write('Callback (' . $subscription['callback'] . ') is subcribed to event (' . $module . '/' . $eventName . ').');
+				$logger->debug('Callback (' . $subscription['callback'] . ') is subcribed to event (' . $module . '/' . $eventName . ').');
 			}
 
 			// start processing

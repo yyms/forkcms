@@ -25,8 +25,7 @@ class BackendCoreCronjobProcessQueuedHooks extends BackendBaseCronjob
 		// get database
 		$db = BackendModel::getDB(true);
 
-		// create log
-		$log = new SpoonLog('custom', BACKEND_CACHE_PATH . '/logs/events');
+		$logger = new \Common\Logger('core', BACKEND_CACHE_PATH . '/logs/events.log');
 
 		// get process-id
 		$pid = getmypid();
@@ -70,14 +69,13 @@ class BackendCoreCronjobProcessQueuedHooks extends BackendBaseCronjob
 					// reset state
 					$processedSuccesfully = false;
 
-					// logging when we are in debugmode
-					if(SPOON_DEBUG) $log->write('Callback (' . serialize($item['callback']) . ') failed.');
+					$logger->debug('Callback (' . serialize($item['callback']) . ') failed.');
 				}
 
 				try
 				{
 					// logging when we are in debugmode
-					if(SPOON_DEBUG) $log->write('Callback (' . serialize($item['callback']) . ') called.');
+					$logger->debug('Callback (' . serialize($item['callback']) . ') called.');
 
 					// call the callback
 					$return = call_user_func($item['callback'], $item['data']);
@@ -91,8 +89,7 @@ class BackendCoreCronjobProcessQueuedHooks extends BackendBaseCronjob
 						// reset state
 						$processedSuccesfully = false;
 
-						// logging when we are in debugmode
-						if(SPOON_DEBUG) $log->write('Callback (' . serialize($item['callback']) . ') failed.');
+						$logger->debug('Callback (' . serialize($item['callback']) . ') failed.');
 					}
 				}
 				catch(Exception $e)
@@ -103,15 +100,13 @@ class BackendCoreCronjobProcessQueuedHooks extends BackendBaseCronjob
 					// reset state
 					$processedSuccesfully = false;
 
-					// logging when we are in debugmode
-					if(SPOON_DEBUG) $log->write('Callback (' . serialize($item['callback']) . ') failed.');
+					$logger->debug('Callback (' . serialize($item['callback']) . ') failed.');
 				}
 
 				// everything went fine so delete the item
 				if($processedSuccesfully) $db->delete('hooks_queue', 'id = ?', $item['id']);
 
-				// logging when we are in debugmode
-				if(SPOON_DEBUG) $log->write('Callback (' . serialize($item['callback']) . ') finished.');
+				$logger->debug('Callback (' . serialize($item['callback']) . ') finished.');
 			}
 
 			// stop it

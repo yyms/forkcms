@@ -12,6 +12,7 @@
  *
  * @author Tijs Verkoyen <tijs@sumocoders.be>
  */
+use Common\Logger;
 class FrontendModel
 {
 	/**
@@ -876,11 +877,8 @@ class FrontendModel
 		$module = (string) $module;
 		$eventName = (string) $eventName;
 
-		// create log instance
-		$log = new SpoonLog('custom', PATH_WWW . '/frontend/cache/logs/events');
-
-		// logging when we are in debugmode
-		if(SPOON_DEBUG) $log->write('Event (' . $module . '/' . $eventName . ') triggered.');
+		$logger = new \Common\Logger('core', FRONTEND_CACHE_PATH . '/logs/events.log');
+		$logger->debug('Event (' . $module . '/' . $eventName . ') triggered.');
 
 		// get all items that subscribe to this event
 		$subscriptions = (array) self::getDB()->getRecords(
@@ -906,11 +904,10 @@ class FrontendModel
 				$item['status'] = 'queued';
 				$item['created_on'] = FrontendModel::getUTCDate();
 
-				// add
+				// add item
 				$queuedItems[] = self::getDB(true)->insert('hooks_queue', $item);
 
-				// logging when we are in debugmode
-				if(SPOON_DEBUG) $log->write('Callback (' . $subscription['callback'] . ') is subcribed to event (' . $module . '/' . $eventName . ').');
+				$logger->debug('Callback (' . $subscription['callback'] . ') is subscribed to event (' . $module . '/' . $eventName . ').');
 			}
 
 			// start processing
