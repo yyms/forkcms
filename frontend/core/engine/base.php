@@ -60,7 +60,7 @@ class FrontendBaseObject
 		{
 			if(!isset($this->logger))
 			{
-				$this->logger = new \Common\Logger($this->getModule(), FRONTEND_FILES_PATH . '/logs/default.log');
+				$this->logger = new \Common\Logger($this->getModule(), FRONTEND_CACHE_PATH . '/logs/default.log');
 			}
 
 			return $this->logger;
