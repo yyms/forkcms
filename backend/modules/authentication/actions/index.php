@@ -108,6 +108,13 @@ class BackendAuthenticationIndex extends BackendBaseActionIndex
 					// increment and store
 					SpoonSession::set('backend_login_attempts', ++$current);
 
+					$this->logger->warn(
+						'Failed login attempt',
+						array(
+							'email' => $txtEmail->getValue()
+						)
+					);
+
 					// show error
 					$this->tpl->assign('hasError', true);
 				}
@@ -118,15 +125,23 @@ class BackendAuthenticationIndex extends BackendBaseActionIndex
 			{
 				// get previous attempt
 				$previousAttempt = (SpoonSession::exists('backend_last_attempt')) ? SpoonSession::get('backend_last_attempt') : time();
+				$attempts = SpoonSession::get('backend_login_attempts');
 
 				// calculate timeout
-				$timeout = 5 * ((SpoonSession::get('backend_login_attempts') - 4));
+				$timeout = 5 * (($attempts - 4));
 
 				// too soon!
 				if(time() < $previousAttempt + $timeout)
 				{
 					// sleep untill the user can login again
 					sleep($timeout);
+
+					$this->logger->warn(
+						'Login throttled for ' . $timeout . ' seconds after ' . $attempts . ' attempts',
+						array(
+							'email' => $txtEmail->getValue()
+						)
+					);
 
 					// set a correct header, so bots understand they can't mess with us.
 					if(!headers_sent()) header('503 Service Unavailable', true, 503);
@@ -170,6 +185,14 @@ class BackendAuthenticationIndex extends BackendBaseActionIndex
 						if(BackendAuthentication::isAllowedModule($module)) break;
 					}
 				}
+
+				$this->logger->info(
+					'Successful login',
+					array(
+						'email' => $txtEmail->getValue(),
+						'user_id' => BackendAuthentication::getUser()->getUserId()
+					)
+				);
 
 				// redirect to the correct URL (URL the user was looking for or fallback)
 				$this->redirect($this->getParameter('querystring', 'string', BackendModel::createUrlForAction(null, $module)));
