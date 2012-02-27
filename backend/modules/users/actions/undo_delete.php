@@ -32,6 +32,14 @@ class BackendUsersUndoDelete extends BackendBaseAction
 				// get user
 				$user = new BackendUser(null, $email);
 
+				$this->logger->info(
+					'User undeleted',
+					array(
+						'undeletor_user_id' => BackendAuthentication::getUser()->getUserId(),
+						'undeleted_user_id' => $user->getUserId()
+					)
+				);
+
 				// item was deleted, so redirect
 				$this->redirect(BackendModel::createURLForAction('edit') . '&id=' . $user->getUserId() . '&report=restored&var=' . $user->getSetting('nickname') . '&highlight=row-' . $user->getUserId());
 			}

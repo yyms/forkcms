@@ -32,13 +32,33 @@ class BackendUsersDelete extends BackendBaseActionDelete
 			$user = new BackendUser($this->id);
 
 			// God-users can't be deleted
-			if($user->isGod()) $this->redirect(BackendModel::createURLForAction('index') . '&error=cant-delete-god');
+			if($user->isGod())
+			{
+				$this->logger->warn(
+					'Attempt to delete a god user',
+					array(
+						'deletor_user_id' => BackendAuthentication::getUser()->getUserId(),
+						'god_user_id' => $this->id
+					)
+				);
+
+				$this->redirect(BackendModel::createURLForAction('index') . '&error=cant-delete-god');
+			}
 
 			// delete item
 			BackendUsersModel::delete($this->id);
 
 			// trigger event
 			BackendModel::triggerEvent($this->getModule(), 'after_delete', array('id' => $this->id));
+
+			$this->logger->info(
+				'User deleted',
+				array(
+					'deletor_user_id' => BackendAuthentication::getUser()->getUserId(),
+					'deleted_user_id' => $this->id,
+					'deleted_user_email' => $user->getEmail()
+				)
+			);
 
 			// item was deleted, so redirect
 			$this->redirect(BackendModel::createURLForAction('index') . '&report=deleted&var=' . $user->getSetting('nickname'));

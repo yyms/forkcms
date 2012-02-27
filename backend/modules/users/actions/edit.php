@@ -272,6 +272,16 @@ class BackendUsersEdit extends BackendBaseActionEdit
 				// trigger event
 				BackendModel::triggerEvent($this->getModule(), 'after_edit', array('item' => $user));
 
+				$this->logger->info(
+					'User edited',
+					array(
+						'editor_user_id' => BackendAuthentication::getUser()->getUserId(),
+						'edited_user_id' => $this->id,
+						'edited_user_old_email' => $this->user->getEmail(),
+						'edited_user_new_email' => (isset($user['email'])) ? $user['email'] : $this->user->getEmail()
+					)
+				);
+
 				// everything is saved, so redirect to the overview
 				$this->redirect(BackendModel::createURLForAction('index') . '&report=edited&var=' . $settings['nickname'] . '&highlight=row-' . $user['id']);
 			}
