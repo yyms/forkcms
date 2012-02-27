@@ -20,7 +20,20 @@ class BackendAuthenticationLogout extends BackendBaseAction
 	public function execute()
 	{
 		parent::execute();
-		BackendAuthentication::logout();
+
+		if(BackendAuthentication::getUser()->isAuthenticated())
+		{
+			$userId = BackendAuthentication::getUser()->getUserId();
+
+			BackendAuthentication::logout();
+
+			$this->logger->info(
+				'Logout',
+				array(
+					'user_id' => $userId
+				)
+			);
+		}
 
 		// redirect to login-screen
 		$this->redirect(BackendModel::createUrlForAction('index', $this->getModule()));

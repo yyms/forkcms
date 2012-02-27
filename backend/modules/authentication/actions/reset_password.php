@@ -86,6 +86,14 @@ class BackendAuthenticationResetPassword extends BackendBaseActionAdd
 				// remove the reset_password_key and reset_password_timestamp usersettings
 				BackendUsersModel::deleteResetPasswordSettings($userId);
 
+				$this->logger->warn(
+					'Password reset key is expired',
+					array(
+						'email' => $this->email,
+						'key' => $this->key
+					)
+				);
+
 				// redirect to the login form, with a timeout error
 				$this->redirect(BackendModel::createURLForAction('index', null, null, array('reset' => 'timeout')));
 			}
@@ -93,6 +101,14 @@ class BackendAuthenticationResetPassword extends BackendBaseActionAdd
 			// check if the provided key matches the one in the user record
 			if($this->key === $this->user->getSetting('reset_password_key')) return true;
 		}
+
+		$this->logger->warn(
+			'Password reset key/email combination is not valid',
+			array(
+				'email' => $this->email,
+				'key' => $this->key
+			)
+		);
 
 		// if we made it here the user is not allowed to access this page
 		return false;
@@ -144,6 +160,14 @@ class BackendAuthenticationResetPassword extends BackendBaseActionAdd
 			{
 				// change the users password
 				BackendUsersModel::updatePassword($this->user, $newPassword->getValue());
+
+				$this->logger->info(
+					'Successful password reset',
+					array(
+						'email' => $this->email,
+						'key' => $this->key
+					)
+				);
 
 				// attempt to login the user
 				if(!BackendAuthentication::loginUser($this->user->getEmail(), $newPassword->getValue()))
