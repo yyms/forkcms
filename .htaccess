@@ -2,6 +2,7 @@
 # note: your hosting company might not allow these directives to be set. In that case,
 # you should either find another hosting company (advised) or remove the line below.
 Options +FollowSymlinks -Indexes
+DirectorySlash Off
 
 # file etags (used when comparing local cached file to server file)
 FileETag MTime Size
@@ -11,9 +12,37 @@ FileETag MTime Size
 	RewriteEngine On
 	RewriteBase /
 
-	# backend is an existing folder, but it should be handled as all urls
-	RewriteCond %{REQUEST_URI} ^/backend/$
-	RewriteRule . index.php [NC,L]
+	# forbidden folders
+	RewriteRule \.git - [F]
+	RewriteRule .*\.gitignore - [F]
+	RewriteRule composer\.json - [F]
+	RewriteRule composer\.lock - [F]
+	RewriteRule phpunit\.xml\.dist - [F]
+	RewriteRule .*\.md - [F]
+	RewriteRule app/logs - [F]
+	RewriteRule app/config - [F]
+	RewriteRule src/Frontend/Cache/CachedTemplates - [F]
+	RewriteRule src/Frontend/Cache/CompiledTemplates - [F]
+	RewriteRule src/Frontend/Cache/Config - [F]
+	RewriteRule src/Frontend/Cache/Locale/.*\.php - [F]
+	RewriteRule src/Frontend/Cache/Logs - [F]
+	RewriteRule src/Frontend/Cache/Navigation/.*\.php - [F]
+	RewriteRule src/Frontend/Cache/Search - [F]
+	RewriteRule src/Backend/Cache/CompiledTemplates - [F]
+	RewriteRule src/Backend/Cache/Config - [F]
+	RewriteRule src/Backend/Cache/Cronjobs - [F]
+	RewriteRule src/Backend/Cache/Locale/.*\.php - [F]
+	RewriteRule src/Backend/Cache/Logs - [F]
+	RewriteRule src/Backend/Cache/Navigation - [F]
+
+	# one url to rule them all
+	# RewriteCond %{HTTP_HOST} !^www\.<domain>\.be [NC]
+	# RewriteCond %{HTTP_HOST} !.*\.dev [NC]
+	# RewriteRule ^(.*)$ http://www.<domain>.be/$1 [R=301,L]
+
+	# src dir should pass via the front controller
+	RewriteCond %{REQUEST_URI} ^/(src|src\/)$
+	RewriteRule . /index.php [NC,L]
 
 	# handle urls
 	RewriteCond %{REQUEST_URI} !^$
@@ -29,16 +58,16 @@ FileETag MTime Size
 <IfModule mod_expires.c>
 	ExpiresActive On
 	<FilesMatch "\.(ico|gif|jpe?g|png|svg|svgz|js|css|swf|ttf|otf|woff|eot)$">
-		ExpiresDefault "access plus 1 month" 
+		ExpiresDefault "access plus 1 month"
 	</FilesMatch>
 </IfModule>
 
 # gzip on Apache 2
 <IfModule mod_deflate.c>
-	AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml text/javascript text/css application/x-javascript application/xhtml+xml application/javascript
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml text/javascript text/css application/x-javascript application/xhtml+xml application/javascript application/json image/svg+xml
 
 	# these browsers do not support deflate
-	BrowserMatch ^Mozilla/4 gzip-only-text/html 
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
 	BrowserMatch ^Mozilla/4.0[678] no-gzip
 	BrowserMatch bMSIE !no-gzip !gzip-only-text/html
 
@@ -47,19 +76,20 @@ FileETag MTime Size
 
 # gzip on Apache 1
 <IfModule mod_gzip.c>
-    mod_gzip_on Yes
+	mod_gzip_on Yes
 
-    mod_gzip_item_include mime ^application/javascript$
-    mod_gzip_item_include mime ^application/x-javascript$
-    mod_gzip_item_include mime ^application/xhtml+xml$
-    mod_gzip_item_include mime ^application/xml$
-    mod_gzip_item_include mime ^text/css$
-    mod_gzip_item_include mime ^text/html$
-    mod_gzip_item_include mime ^text/javascript$
-    mod_gzip_item_include mime ^text/plain$
-    mod_gzip_item_include mime ^text/xml$
-    mod_gzip_item_exclude mime ^image/
+	mod_gzip_item_include mime ^application/javascript$
+	mod_gzip_item_include mime ^application/x-javascript$
+	mod_gzip_item_include mime ^application/json$
+	mod_gzip_item_include mime ^application/xhtml+xml$
+	mod_gzip_item_include mime ^application/xml$
+	mod_gzip_item_include mime ^text/css$
+	mod_gzip_item_include mime ^text/html$
+	mod_gzip_item_include mime ^text/javascript$
+	mod_gzip_item_include mime ^text/plain$
+	mod_gzip_item_include mime ^text/xml$
+	mod_gzip_item_exclude mime ^image/
 
-    # browser issues
-    mod_gzip_item_exclude reqheader "User-agent: Mozilla/4.0[678]"
+	# browser issues
+	mod_gzip_item_exclude reqheader "User-agent: Mozilla/4.0[678]"
 </IfModule>

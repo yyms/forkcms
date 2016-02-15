@@ -51,14 +51,6 @@ class CampaignMonitor
 
 
 	/**
-	 * Default campaign ID
-	 *
-	 * @var	string
-	 */
-	private $campaignId;
-
-
-	/**
 	 * Default client ID
 	 *
 	 * @var	string
@@ -107,14 +99,6 @@ class CampaignMonitor
 
 
 	/**
-	 * SOAP connection
-	 *
-	 * @var SoapClient
-	 */
-	private $soap;
-
-
-	/**
 	 * The timeout
 	 *
 	 * @var	int
@@ -145,6 +129,7 @@ class CampaignMonitor
 	 * @param	string $URL						The base URL of your CreateSend site. e.g. http://example.createsend.com/.
 	 * @param	string $username				The username you use to login to Campaign Monitor.
 	 * @param	string $password				The password you use to login to Campaign Monitor.
+     * @param	int[optional] $timeOut			The default timeout
 	 * @param	string[optional] $clientId		The default client ID to use throughout the class.
 	 * @param	string[optional] $listId		The default list ID to use throughout the class.
 	 */
@@ -177,8 +162,8 @@ class CampaignMonitor
 	 * @param	string $email					The email address of the new subscriber.
 	 * @param	string $name					The name of the new subscriber. If the name is unknown, an empty string can be passed in.
 	 * @param	array[optional] $customFields	The custom fields for this subscriber in key/value pairs.
-	 * $param	bool[optional] $resubscribe		Subscribes an unsubscribed email address back to the list if this is true.
-	 * $param	string[optional] $listId		The list you want to add the subscriber to.
+	 * @param	bool[optional] $resubscribe		Subscribes an unsubscribed email address back to the list if this is true.
+	 * @param	string[optional] $listId		The list you want to add the subscriber to.
 	 */
 	public function addSubscriber($email, $name, $customFields = array(), $resubscribe = true, $listId = null)
 	{
@@ -259,12 +244,10 @@ class CampaignMonitor
 	 *
 	 * @return	string
 	 * @param	string $companyName		The client company name.
-	 * @param	string $contactName		The personal name of the principle contact for this client.
-	 * @param	string $email			An email address to which this client will be sent application-related emails.
 	 * @param	string $country			This client’s country.
 	 * @param	string $timezone		Client timezone for tracking and reporting data.
 	 */
-	public function createClient($companyName, $contactName, $email, $country, $timezone)
+	public function createClient($companyName, $country, $timezone)
 	{
 		// fetch the country list
 		$countries = $this->getCountries();
@@ -278,8 +261,6 @@ class CampaignMonitor
 
 		// set parameters
 		$parameters['CompanyName'] = (string) $companyName;
-		$parameters['ContactName'] = (string) $contactName;
-		$parameters['EmailAddress'] = (string) $email;
 		$parameters['Country'] = (string) $country;
 		$parameters['Timezone'] = (string) $timezone;
 
@@ -409,7 +390,7 @@ class CampaignMonitor
 	/**
 	 * Creates a template. Returns the template ID when succesful
 	 *
-	 * @return	mixed
+	 * @return	string
 	 * @param	string $name						The name of the template. Maximum of 30 characters (will be truncated to 30 characters if longer).
 	 * @param	string $HTMLPageURL					The URL of the HTML page you have created for the template.
 	 * @param	string[optional] $zipFileURL		Optional URL of a zip file containing any other files required by the template.
@@ -519,8 +500,7 @@ class CampaignMonitor
 	 * @return	string
 	 * @param	string $url						The url to call.
 	 * @param	array[optiona] $parameters		Optional parameters.
-	 * @param	bool[optional] $method			The method to use. Possible values are GET, POST.
-	 * @param	string[optional] $filePath		The path to the file to upload.
+	 * @param	string|boolean $method			The method to use. Possible values are GET, POST.
 	 * @param	bool[optional] $secure			Do a secure call over https with basic HTTP auth
 	 * @param	bool[optional] $expectJSON		Do we expect JSON.
 	 * @param	bool[optional] $returnHeaders	Should the headers be returned?
@@ -1051,7 +1031,6 @@ class CampaignMonitor
 		// reserve variable
 		$result = array();
 		$details = $record['BasicDetails'];
-		$access = $record['AccessDetails'];
 		$billing = $record['BillingDetails'];
 
 		// basic details
@@ -1062,10 +1041,6 @@ class CampaignMonitor
 		$result['email'] = $details['EmailAddress'];
 		$result['country'] = $details['Country'];
 		$result['timezone'] = $details['TimeZone'];
-
-		// access info
-		$result['username'] = empty($access['Username']) ? null : $access['Username'];
-		$result['access_level'] = empty($access['AccessLevel']) ? null : $access['AccessLevel'];
 
 		// billing info
 		$result['can_purchase_credits'] = $billing['CanPurchaseCredits'];
@@ -1384,7 +1359,7 @@ class CampaignMonitor
 	/**
 	 * Get response format
 	 *
-	 * @return	void
+	 * @return	string
 	 */
 	public function getResponseFormat()
 	{
@@ -1466,7 +1441,7 @@ class CampaignMonitor
 	/**
 	 * Set the site URL
 	 *
-	 * @return	void
+	 * @return	string
 	 */
 	private function getSiteURL()
 	{
@@ -1842,7 +1817,7 @@ class CampaignMonitor
 	/**
 	 * Schedules an existing campaign for sending. The campaign must be imported with defined recipients. For campaigns with more than 5 recipients the user must have sufficient credits or their credit card details saved within the application for the campaign to be sent via the API. For campaigns with 5 recipients or less the user must have enough test campaigns remaining in their API account.
 	 *
-	 * @return	bool
+	 * @return	string
 	 * @param	string $campaignId	The ID of the campaign to send.
 	 * @param	string $confirmationEmail		The email address where the confirmation email will be sent to.
 	 * @param	string[optional] $deliveryDate	The date the campaign should be scheduled to be sent. (YYYY-MM-DD HH:MM:SS)
@@ -1861,9 +1836,9 @@ class CampaignMonitor
 	/**
 	 * This sends a preview campaign based for a given campaign ID.
 	 *
-	 * @return	bool
+	 * @return	string
 	 * @param	string $campaignId	The ID of the campaign to send.
-	 * @param	mixed $recipients This can be an e-mail address string, or an array of addresses.
+	 * @param	string $recipients This can be an e-mail address string, or an array of addresses.
 	 * @param	string[optional] $personalization This can be 'Fallback','Random', or a specific e-mail address.
 	 */
 	public function sendCampaignPreview($campaignId, $recipients, $personalization = 'Fallback')
@@ -1984,6 +1959,7 @@ class CampaignMonitor
 	 * @param	array[optional] $customFields	The custom fields for this subscriber in key/value pairs.
 	 * $param	bool[optional] $resubscribe		Subscribes an unsubscribed email address back to the list if this is true.
 	 * $param	string[optional] $listId		The list you want to add the subscriber to.
+	 * @param string $listId
 	 */
 	public function subscribe($email, $name = null, $customFields = array(), $resubscribe = true, $listId = null)
 	{
@@ -1994,7 +1970,7 @@ class CampaignMonitor
 	/**
 	 * Changes the status of an Active Subscriber to an Unsubscribed Subscriber who will no longer receive campaigns sent to that Subscriber List.
 	 *
-	 * @return	bool
+	 * @return	string
 	 * @param	string $email				The emailaddress.
 	 * @param	string[optional] $listId	The list ID to unsubscribe from
 	 */
@@ -2017,15 +1993,13 @@ class CampaignMonitor
 	/**
 	 * Updates a client's basic settings.
 	 *
-	 * @return	bool
+	 * @return	string
 	 * @param	string $companyName			The client company name.
-	 * @param	string $contactName			The personal name of the principle contact for this client.
-	 * @param	string $email				An email address to which this client will be sent application-related emails.
 	 * @param	string $country				This client's country.
 	 * @param	string $timezone			Client timezone for tracking and reporting data.
 	 * @param	string[optional] $clientId	The client ID to update.
 	 */
-	public function updateClientBasics($companyName, $contactName, $email, $country, $timezone, $clientId = null)
+	public function updateClientBasics($companyName, $country, $timezone, $clientId = null)
 	{
 		// set ID
 		$clientId = empty($clientId) ? $this->getClientId() : $clientId;
@@ -2042,8 +2016,6 @@ class CampaignMonitor
 
 		// set parameters
 		$parameters['CompanyName'] = (string) $companyName;
-		$parameters['ContactName'] = (string) $contactName;
-		$parameters['EmailAddress'] = (string) $email;
 		$parameters['Country'] = (string) $country;
 		$parameters['Timezone'] = (string) $timezone;
 
@@ -2055,7 +2027,7 @@ class CampaignMonitor
 	/**
 	 * Updates a subscriber list's details.
 	 *
-	 * @return	bool
+	 * @return	string
 	 * @param	string $title								The title of the list.
 	 * @param	string[optional] $unsubscribePage			The URL to which subscribers will be directed when unsubscribing from the list. If left blank or omitted a generic unsubscribe page is used.
 	 * @param	bool[optional] $confirmOptIn				Either true or false depending on whether the list requires email confirmation or not. Please see the help documentation for more details of what this means.
